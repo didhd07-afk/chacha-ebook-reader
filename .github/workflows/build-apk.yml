@@ -31,8 +31,10 @@ jobs:
 
       - name: Fix WebView setting
         run: |
-          sed -i 's/webView\.javaScriptEnabled/webView.settings.javaScriptEnabled/g' "$PROJECT_DIR/app/src/main/java/com/chacha/ebook/MainActivity.kt"
-
+          FILE="$PROJECT_DIR/app/src/main/java/com/chacha/ebook/MainActivity.kt"
+          sed -i 's/\.javaScriptEnabled/\.settings.javaScriptEnabled/g' "$FILE"
+          sed -i 's/\.settings\.settings\.javaScriptEnabled/\.settings.javaScriptEnabled/g' "$FILE"background: background: background: 
+     
       - name: Build APK
         run: |
           cd "$PROJECT_DIR"
