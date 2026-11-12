@@ -33,13 +33,7 @@ jobs:
       - name: Fix WebView setting
         run: |
           FILE="$PROJECT_DIR/app/src/main/java/com/chacha/ebook/MainActivity.kt"
-          echo "Checking WebView code..."
-          sed -n '40,45p' "$FILE"
-          sed -i 's/webView\.javaScriptEnabled/webView.settings.javaScriptEnabled/g' "$FILE"
-          sed -i 's/webView\.settings\.settings\.javaScriptEnabled/webView.settings.javaScriptEnabled/g' "$FILE"
-          sed -i 's/webSettings\.javaScriptEnabled/webSettings.javaScriptEnabled/g' "$FILE"
-          echo "Fixed WebView code:"
-          sed -n '40,45p' "$FILE"
+          sed -i 's/settings\.javaScriptEnabled/this.settings.javaScriptEnabled/g' "$FILE"
 
       - name: Build APK
         run: |
