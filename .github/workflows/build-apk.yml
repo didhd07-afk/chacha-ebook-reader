@@ -1,4 +1,3 @@
-
 name: Build Android APK
 
 on:
@@ -20,20 +19,15 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Extract project ZIP
+      - name: Extract redesigned project ZIP
         run: |
           mkdir -p extracted
-          ZIP=$(find . -maxdepth 1 -name '*.zip' | head -n 1)
-          test -n "$ZIP" || exit 1
+          ZIP="ChachaEbookReader_RidibooksStyle.zip"
+          test -f "$ZIP" || { echo "Project ZIP not found: $ZIP"; exit 1; }
           unzip -q "$ZIP" -d extracted
           SETTINGS=$(find extracted -type f -name settings.gradle.kts | head -n 1)
           test -n "$SETTINGS" || exit 1
           echo "PROJECT_DIR=$(dirname "$SETTINGS")" >> "$GITHUB_ENV"
-
-      - name: Fix WebView setting
-        run: |
-          FILE="$PROJECT_DIR/app/src/main/java/com/chacha/ebook/MainActivity.kt"
-          sed -i 's/settings\.javaScriptEnabled/this.settings.javaScriptEnabled/g' "$FILE"
 
       - name: Build APK
         run: |
@@ -43,6 +37,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ChachaEbookReader-debug-apk
+          name: ChachaEbookReader-RidibooksStyle-APK
           path: '**/build/outputs/apk/debug/*.apk'
           if-no-files-found: error
