@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -p extracted
           ZIP=$(find . -maxdepth 1 -name '*.zip' | head -n 1)
+          test -n "$ZIP" || exit 1
           unzip -q "$ZIP" -d extracted
           SETTINGS=$(find extracted -type f -name settings.gradle.kts | head -n 1)
           test -n "$SETTINGS" || exit 1
@@ -32,7 +33,14 @@ jobs:
       - name: Fix WebView setting
         run: |
           FILE="$PROJECT_DIR/app/src/main/java/com/chacha/ebook/MainActivity.kt"
+          echo "Checking WebView code..."
+          sed -n '40,45p' "$FILE"
           sed -i 's/webView\.javaScriptEnabled/webView.settings.javaScriptEnabled/g' "$FILE"
+          sed -i 's/webView\.settings\.settings\.javaScriptEnabled/webView.settings.javaScriptEnabled/g' "$FILE"
+          sed -i 's/webSettings\.javaScriptEnabled/webSettings.javaScriptEnabled/g' "$FILE"
+          echo "Fixed WebView code:"
+          sed -n '40,45p' "$FILE"
+
       - name: Build APK
         run: |
           cd "$PROJECT_DIR"
@@ -44,5 +52,3 @@ jobs:
           name: ChachaEbookReader-debug-apk
           path: '**/build/outputs/apk/debug/*.apk'
           if-no-files-found: error
-
-
