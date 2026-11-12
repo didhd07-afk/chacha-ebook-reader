@@ -27,7 +27,9 @@ jobs:
           SETTINGS=$(find extracted -type f -name settings.gradle.kts | head -n 1)
           test -n "$SETTINGS" || exit 1
           echo "PROJECT_DIR=$(dirname "$SETTINGS")" >> "$GITHUB_ENV"
-
+       - name: Fix WebView setting
+        run: |
+          sed -i 's/webView\.javaScriptEnabled/webView.settings.javaScriptEnabled/g' "$PROJECT_DIR/app/src/main/java/com/chacha/ebook/MainActivity.kt"
       - name: Build APK
         run: |
           cd "$PROJECT_DIR"
